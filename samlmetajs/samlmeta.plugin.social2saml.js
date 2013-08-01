@@ -18,18 +18,20 @@
 					'<fieldset><legend>Social2SAML encrypted data</legend>',
 					'<div class="social2samlfield inlineField">',
 					'<label for="social2saml-' + randID + '-EncryptedData">Encrypted data: </label>',
-					'<input type="text" name="social2saml-' + randID + '-EncryptedData-name" id="social2saml-' + randID + '-EncryptedData" value="' + (social2saml.encryptedData || '') + '" />',
+					'<textarea name="social2saml-' + randID + '-EncryptedData-name" id="social2saml-' + randID + '-EncryptedData" cols="50">',
+                    (social2saml.values || ''),
+                    '</textarea>',
 					'</div>',
-
 					'<button style="display: block; clear: both" class="remove">Remove</button>',
-
 					'</fieldset>'
 				];
 
 			$(social2samlHTML.join('')).appendTo("div#social2saml > div.content").find('button.remove').click(function (e) {
 				e.preventDefault();
 				$(e.target).closest('fieldset').remove();
+                $("div#social2saml button.addsocial2saml").show();
 			});
+            $("div#social2saml button.addsocial2saml").hide();
 		}
 	};
 
@@ -38,7 +40,7 @@
         getNewSocial2SamlEntityAttr: function () {
             var newSocial2SamlEntityAttr = {'values': []};
             newSocial2SamlEntityAttr.nameFormat = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
-            newSocial2SamlEntityAttr.name = 'http://social2saml.nordu.net/customer';
+            newSocial2SamlEntityAttr.name = 'http://social2saml.nordu.net/customer'; // Strange name
             newSocial2SamlEntityAttr.friendlyName = 'Social2SAML Encrypted Data';
             return newSocial2SamlEntityAttr;
         },
@@ -73,12 +75,12 @@
 
 			// Add existing Social2SAML entity attribute (from XML)
 			if (entitydescriptor.entityAttributes) {
-                var newSocial2SamlEntityAttr = this.getNewSocial2SamlEntityAttr();
+                var newSocial2SamlEntityAttr = SAMLmetaJS.plugins.social2saml.getNewSocial2SamlEntityAttr();
                 for (i=0; i < entitydescriptor.entityAttributes.length; i += 1) {
                     // Maybe just a check of name is enough?
                     if ((newSocial2SamlEntityAttr.name === entitydescriptor.entityAttributes[i].name) &&
                         (newSocial2SamlEntityAttr.nameFormat === entitydescriptor.entityAttributes[i].nameFormat)) {
-                        UI.addEntityAttr(entitydescriptor.entityAttributes[i]);
+                        UI.addSocial2Saml(entitydescriptor.entityAttributes[i]);
                     }
 				}
 			}
@@ -86,9 +88,9 @@
 
 		toXML: function (entitydescriptor) {
 			$('div#social2saml fieldset').each(function (index, element) {
-				var $inputs = $(element).find('input');
+				var textarea = $(element).find('textarea');
                 var newSocial2SamlEntityAttr = SAMLmetaJS.plugins.social2saml.getNewSocial2SamlEntityAttr();
-				newSocial2SamlEntityAttr.values.push($inputs.eq(0).attr('value').trim());
+				newSocial2SamlEntityAttr.values.push(textarea.val().trim());
 
 				if (!entitydescriptor.entityAttributes) {
 					entitydescriptor.entityAttributes = [];
