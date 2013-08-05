@@ -136,6 +136,7 @@ SAMLmetaJS.xmlupdater = function(xmlstring) {
 			if (
 				SAMLmetaJS.tools.hasContents(entitydescriptor.name) ||
 				SAMLmetaJS.tools.hasContents(entitydescriptor.descr) ||
+                SAMLmetaJS.tools.hasContents(entitydescriptor.saml2sp.entityAttributes) ||
 				entitydescriptor.location ||
 				hasRequestInitiator ||
 				hasDiscoveryResponse ||
