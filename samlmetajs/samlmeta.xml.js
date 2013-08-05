@@ -154,6 +154,17 @@ SAMLmetaJS.xmlupdater = function(xmlstring) {
 					}
 				}
 
+                if (entitydescriptor.saml2sp.entityAttributes) {
+                    spEntityAttributes = SAMLmetaJS.XML.addNodeIfNotExists(doc, extensions, 'EntityAttributes', SAMLmetaJS.Constants.ns.mdattr, 'mdattr');
+
+                    SAMLmetaJS.XML.wipeChildren(spEntityAttributes, SAMLmetaJS.Constants.ns.saml, 'Attribute');
+                    for(i = 0; i < entitydescriptor.saml2sp.entityAttributes.length; i += 1) {
+                        this.addAttribute(spEntityAttributes, entitydescriptor.saml2sp.entityAttributes[i]);
+                    }
+                } else {
+                    SAMLmetaJS.XML.wipeChildren(extensions, SAMLmetaJS.Constants.ns.mdattr, 'EntityAttributes');
+                }
+
 				SAMLmetaJS.XML.wipeChildren(extensions, SAMLmetaJS.Constants.ns.idpdisc, 'DiscoveryResponse');
 				if (hasDiscoveryResponse) {
 					for (i = 0; i < entitydescriptor.saml2sp.DiscoveryResponse.length; i += 1) {

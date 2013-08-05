@@ -878,6 +878,12 @@ parseFromString = function(xmlstring) {
 					saml2sp.mdui = parseUIInfo(n);
 				}
 			},
+            {
+				namespace: constants.ns.mdattr, name: 'EntityAttributes',
+				callback: function(n) {
+					saml2sp.entityAttributes = parseEntityAttributes(n);
+				}
+			},
 			{
 				namespace: constants.ns.saml,
 				callback: function(n) {

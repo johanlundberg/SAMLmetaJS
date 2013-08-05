@@ -74,13 +74,14 @@
 			UI.clearSocial2Saml();
 
 			// Add existing Social2SAML entity attribute (from XML)
-			if (entitydescriptor.entityAttributes) {
+			if (entitydescriptor.saml2sp.entityAttributes) {
+                var entityAttributes = entitydescriptor.saml2sp.entityAttributes;
                 var newSocial2SamlEntityAttr = SAMLmetaJS.plugins.social2saml.getNewSocial2SamlEntityAttr();
-                for (i=0; i < entitydescriptor.entityAttributes.length; i += 1) {
+                for (i=0; i < entityAttributes.length; i += 1) {
                     // Maybe just a check of name is enough?
-                    if ((newSocial2SamlEntityAttr.name === entitydescriptor.entityAttributes[i].name) &&
-                        (newSocial2SamlEntityAttr.nameFormat === entitydescriptor.entityAttributes[i].nameFormat)) {
-                        UI.addSocial2Saml(entitydescriptor.entityAttributes[i]);
+                    if ((newSocial2SamlEntityAttr.name === entityAttributes[i].name) &&
+                        (newSocial2SamlEntityAttr.nameFormat === entityAttributes[i].nameFormat)) {
+                        UI.addSocial2Saml(entityAttributes[i]);
                     }
 				}
 			}
@@ -92,10 +93,10 @@
                 var newSocial2SamlEntityAttr = SAMLmetaJS.plugins.social2saml.getNewSocial2SamlEntityAttr();
 				newSocial2SamlEntityAttr.values.push(textarea.val().trim());
 
-				if (!entitydescriptor.entityAttributes) {
-					entitydescriptor.entityAttributes = [];
+				if (!entitydescriptor.saml2sp.entityAttributes) {
+					entitydescriptor.saml2sp.entityAttributes = [];
 				}
-				entitydescriptor.entityAttributes.push(newSocial2SamlEntityAttr);
+				entitydescriptor.saml2sp.entityAttributes.push(newSocial2SamlEntityAttr);
 			});
 		},
 		validate: function () {
